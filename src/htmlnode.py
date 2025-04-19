@@ -12,7 +12,7 @@ class HtmlNode:
         text_prop = ''
         if self.props:
             for key, value in self.props.items():
-                text_prop += f" {key}={value}"
+                text_prop += f' "{key}"="{value}"'
         return text_prop
             
     def __repr__(self):

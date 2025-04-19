@@ -5,18 +5,10 @@ class LeafNode(HtmlNode):
         super().__init__(tag, value, [], props)
         
     def to_html(self):
-        attributes_value = ""
-        
-        if self.value == "":
+        if self.value == None:
             raise ValueError()
         
         if self.tag == None:
             return self.value
-        
-        if self.props == None:
-            return f"<{self.tag}>{self.value}</{self.tag}>"
-        
-        for key, value in self.props.items():
-            attributes_value += f' {key}="{value}"'
             
-        return f"<{self.tag}{attributes_value}>{self.value}</{self.tag}>"
+        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"

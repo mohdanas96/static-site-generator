@@ -8,4 +8,8 @@ class TestLeafNode(unittest.TestCase):
         
     def test_leaf_to_html_a(self):
         node = LeafNode("a", "Click me", {"href": "https://google.com", "target": "_blank"})
-        self.assertEqual(node.to_html(), '<a href="https://google.com" target="_blank">Click me</a>')
+        self.assertEqual(node.to_html(), '<a "href"="https://google.com" "target"="_blank">Click me</a>')
+        
+    def test_leaf_to_html_no_tag(self):
+        node = LeafNode(tag=None, value="Hello world", props=None)
+        self.assertEqual(node.to_html(), "Hello world")

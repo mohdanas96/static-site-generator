@@ -11,7 +11,7 @@ class TestHtmlNode(unittest.TestCase):
         }
         html_node = HtmlNode("<a>", props=props_test)
         props_html = html_node.props_to_html()
-        self.assertEqual(props_html, f" href={props_test['href']} target={props_test['target']}")
+        self.assertEqual(props_html, f' "href"="{props_test["href"]}" "target"="{props_test["target"]}"')
         
     def test_repr_(self):
         children_nodes = [HtmlNode(tag="<a>", value="Click me"), TextNode(text="Hello world", text_type=TextType.BOLD)]
