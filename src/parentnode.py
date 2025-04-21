@@ -16,7 +16,7 @@ class ParentNode(HtmlNode):
             # recursively call .to_html() on all childrens
             child_html += node.to_html()
             
-        return f"<{self.tag}>{child_html}</{self.tag}>"
+        return f"<{self.tag}{self.props_to_html()}>{child_html}</{self.tag}>"
         
         
         
