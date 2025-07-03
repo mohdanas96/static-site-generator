@@ -1,7 +1,7 @@
-from textnode import Textnode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
 def main():
-    textnode = Textnode("hello world", TextType.BOLD_TEXT)
-    print(textnode)
+    textnode = TextNode("hello world", TextType.BOLD)
+    print(text_node_to_html_node(textnode))
     
 main()

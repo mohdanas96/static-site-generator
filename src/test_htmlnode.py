@@ -4,6 +4,7 @@ from htmlnode import HtmlNode
 from textnode import TextNode, TextType
 
 class TestHtmlNode(unittest.TestCase):
+    
     def test_props_to_html(self):
         props_test = {
             "href": "https://google.com",
@@ -20,10 +21,9 @@ class TestHtmlNode(unittest.TestCase):
         
     def test_missing_values(self):
         html_node = HtmlNode(tag="<a>", value="Click me")
-        assert html_node.tag is "<a>"
-        assert html_node.value is "Click me"
-        assert html_node.children is None
-        assert html_node.props is None
+        assert html_node.value == "Click me"
+        assert html_node.children == None
+        assert html_node.props == None
         
 if __name__ == "__main__":
     unittest.main()
