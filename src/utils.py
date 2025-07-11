@@ -1,5 +1,6 @@
 from textnode import TextType, TextNode
 import re
+from blocktype import BlockType
 
 def markdown_to_blocks(markdown):
     block_nodes = []
@@ -17,6 +18,24 @@ def text_to_textnodes(text):
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes
+
+def block_to_block_type(block):
+    trimmed_block = block.strip()
+    if trimmed_block.startswith("#"):
+        return BlockType.HEADING
+    if trimmed_block.startswith("```") and trimmed_block.endswith("```"):
+        return BlockType.CODE
+    if trimmed_block.startswith(">"):
+        return BlockType.QUOTE
+    if trimmed_block.startswith("- "):
+        return BlockType.UNORDERED_LIST
+    if trimmed_block.startswith("1. "):
+        list_items = trimmed_block.split("\n")
+        final_list = [item.strip() for item in list_items]
+        count = 1
+        if final_list[1].startswith(f"{count + 1}. ") and final_list[2].startswith(f"{count + 2}. "):
+            return BlockType.ORDERED_LIST
+    return BlockType.PARAGRAPH
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
