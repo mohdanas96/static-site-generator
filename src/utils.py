@@ -1,6 +1,14 @@
 from textnode import TextType, TextNode
 import re
 
+def markdown_to_blocks(markdown):
+    block_nodes = []
+    nodes = markdown.split("\n\n")
+    for node in nodes:
+        block_nodes.append(node.strip())
+    block_nodes = [s for s in block_nodes if s]
+    return block_nodes
+
 def text_to_textnodes(text):
     plain_text_node = TextNode(text, TextType.NORMAL)
     nodes = split_nodes_delimiter([plain_text_node], "**", TextType.BOLD)
@@ -37,7 +45,7 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     attributes_lsit = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return attributes_lsit
-
+    
 def split_nodes_image(old_nodes):
     new_nodes = []
     for old_node in old_nodes:
