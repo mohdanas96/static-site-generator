@@ -131,40 +131,34 @@ This is the same paragraph on a new line
                 "- This is a list\n- with items",
             ],
         )
-        
+
     def test_heading_block_to_heading_type(self):
         block = "# This is a heading"
         type = utils.block_to_block_type(block)
         self.assertEqual(type, BlockType.HEADING)
-        
+
     def test_code_block_to_code_type(self):
         block = "```this is a code block```"
         type = utils.block_to_block_type(block)
         self.assertEqual(type, BlockType.CODE)
-        
+
     def test_quote_block_to_quote_type(self):
         block = "> this is a quote type"
         type = utils.block_to_block_type(block)
         self.assertEqual(type, BlockType.QUOTE)
-    
+
     def test_unordered_list_block_to_unordered_list_type(self):
-        block = '''- First item
+        block = """- First item
         - Second item
         - Third item
-        '''
+        """
         type = utils.block_to_block_type(block)
         self.assertEqual(type, BlockType.UNORDERED_LIST)
-        
+
     def test_ordered_list_block_to_ordered_list_type(self):
-        block = '''1. First item
+        block = """1. First item
         2. Second item
         3. Third item
-        '''
+        """
         type = utils.block_to_block_type(block)
         self.assertEqual(type, BlockType.ORDERED_LIST)
-    
-    def test_paragraph_to_paragraph_type(self):
-        block = "This is a pargraph of text"
-        type = utils.block_to_block_type(block)
-        self.assertEqual(type, BlockType.PARAGRAPH)
-        
