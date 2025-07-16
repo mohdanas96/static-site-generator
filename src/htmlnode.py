@@ -10,9 +10,10 @@ class HtmlNode:
     
     def props_to_html(self):
         text_prop = ''
+        # print(self.props,"PROPPPPPPPPPPS")
         if self.props:
-            for key, value in self.props.items():
-                text_prop += f' "{key}"="{value}"'
+            for prop in self.props:
+                text_prop += f' {prop}={self.props[prop]}'
         return text_prop
             
     def __repr__(self):

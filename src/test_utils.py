@@ -228,3 +228,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(html, "<div><blockquote>This is a blockquote</blockquote></div>")
         
+    def test_extract_tilte(self):
+        md = "# This is a title"
+        title = utils.extract_title(md)
+        self.assertEqual(title, "This is a title")

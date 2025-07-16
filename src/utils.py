@@ -2,6 +2,38 @@ from textnode import TextType, TextNode, text_node_to_html_node
 import re
 from blocktype import BlockType
 from parentnode import ParentNode
+import os
+import shutil
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    md_f = open(from_path, "r", encoding="utf-8")
+    md = md_f.read()
+    md_f.close()
+    html_f = open(template_path, "r", encoding="utf-8")
+    template_html = html_f.read()
+    #print(template_html, "TEMPLATE HTML")
+    html_f.close()
+    html_node = markdown_to_html_node(md)
+    html = html_node.to_html()
+    title = extract_title(md)
+    template_html = template_html.replace("{{ Title }}", title)
+    template_html = template_html.replace("{{ Content }}", html)
+
+    if os.path.exists(dest_path):
+        shutil.rmtree(dest_path)
+    dest_f = open(dest_path, "w", encoding="utf-8")
+    dest_f.write(template_html)
+    dest_f.close()
+
+
+def extract_title(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        if block.startswith("#"):
+            if block.count("#") == 1:
+                title = block.replace("#", "")
+                return title.strip()
 
 
 def markdown_to_blocks(markdown):
@@ -83,6 +115,7 @@ def split_nodes_image(old_nodes):
             continue
         original_text = old_node.text
         images = extract_markdown_images(original_text)
+        # print(images, "IMAGESSS")
         if len(images) == 0:
             new_nodes.append(old_node)
             continue
@@ -174,7 +207,7 @@ def heading_to_html_node(block):
     count = block.count("#")
     if count > 6:
         raise ValueError("Invalid heading")
-    text = block[count + 1:]
+    text = block[count + 1 :]
     children = text_to_children(text)
     return ParentNode(f"h{count}", children)
 
