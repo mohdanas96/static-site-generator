@@ -165,7 +165,7 @@ def block_to_html_node(block):
 
 def paragraph_to_html_node(block):
     lines = block.split("\n")
-    paragraph = " ".jon(lines)
+    paragraph = " ".join(lines)
     children = text_to_children(paragraph)
     return ParentNode("p", children)
 
@@ -174,15 +174,16 @@ def heading_to_html_node(block):
     count = block.count("#")
     if count > 6:
         raise ValueError("Invalid heading")
-    children = text_to_children(block)
-    return ParentNode(f"<h{count}>", children)
+    text = block[count + 1:]
+    children = text_to_children(text)
+    return ParentNode(f"h{count}", children)
 
 
 def code_to_html_node(block):
     if not block.startswith("```") or not block.endswith("```"):
         raise ValueError("invalid code block")
     text = block[4:-3]
-    raw_text_node = TextNode(text, TextType.TEXT)
+    raw_text_node = TextNode(text, TextType.NORMAL)
     child = text_node_to_html_node(raw_text_node)
     code = ParentNode("code", [child])
     return ParentNode("pre", [code])
