@@ -10,7 +10,6 @@ class HtmlNode:
     
     def props_to_html(self):
         text_prop = ''
-        # print(self.props,"PROPPPPPPPPPPS")
         if self.props:
             for prop in self.props:
                 text_prop += f' {prop}={self.props[prop]}'

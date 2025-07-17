@@ -4,6 +4,25 @@ from blocktype import BlockType
 from parentnode import ParentNode
 import os
 import shutil
+from pathlib import Path
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    dir_contents = ""
+    if os.path.isdir(dir_path_content):
+        dir_contents = os.listdir(dir_path_content)
+    if dir_contents:
+        for content in dir_contents:
+            final_path = os.path.join(dir_path_content, content)
+            dest_path = os.path.join(dest_dir_path, content)
+            if os.path.isfile(final_path):
+                dest_file_path = Path(dest_path.replace(".md", ".html"))
+                dest_file_path.parent.mkdir(parents=True, exist_ok=True)
+                generate_page(final_path, template_path, dest_file_path)
+            else:
+                dest_path = os.path.join(dest_dir_path, content)
+                generate_pages_recursive(final_path, template_path, dest_path)
+
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
@@ -12,7 +31,6 @@ def generate_page(from_path, template_path, dest_path):
     md_f.close()
     html_f = open(template_path, "r", encoding="utf-8")
     template_html = html_f.read()
-    #print(template_html, "TEMPLATE HTML")
     html_f.close()
     html_node = markdown_to_html_node(md)
     html = html_node.to_html()
@@ -22,7 +40,7 @@ def generate_page(from_path, template_path, dest_path):
 
     if os.path.exists(dest_path):
         shutil.rmtree(dest_path)
-    dest_f = open(dest_path, "w", encoding="utf-8")
+    dest_f = open(dest_path, "x", encoding="utf-8")
     dest_f.write(template_html)
     dest_f.close()
 
@@ -69,9 +87,7 @@ def block_to_block_type(block):
         list_items = trimmed_block.split("\n")
         final_list = [item.strip() for item in list_items]
         count = 1
-        if final_list[1].startswith(f"{count + 1}. ") and final_list[2].startswith(
-            f"{count + 2}. "
-        ):
+        if final_list[1].startswith(f"{count + 1}. "):
             return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
 
@@ -115,7 +131,6 @@ def split_nodes_image(old_nodes):
             continue
         original_text = old_node.text
         images = extract_markdown_images(original_text)
-        # print(images, "IMAGESSS")
         if len(images) == 0:
             new_nodes.append(old_node)
             continue
