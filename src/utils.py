@@ -37,8 +37,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(md)
     template_html = template_html.replace("{{ Title }}", title)
     template_html = template_html.replace("{{ Content }}", html)
-    template_html = template_html.replace('href="/', f'href="{basepath}')
-    template_html = template_html.replace('src="/', f'src="{basepath}')
+    template_html = template_html.replace('href="/', 'href="' + basepath)
+    template_html = template_html.replace('src="/', 'src="' + basepath)
 
     if os.path.exists(dest_path):
         shutil.rmtree(dest_path)
