@@ -5,6 +5,7 @@ from parentnode import ParentNode
 import os
 import shutil
 from pathlib import Path
+import re
 
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
@@ -37,8 +38,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(md)
     template_html = template_html.replace("{{ Title }}", title)
     template_html = template_html.replace("{{ Content }}", html)
-    template_html = template_html.replace('href="/', 'href="' + basepath)
-    template_html = template_html.replace('src="/', 'src="' + basepath)
+    template_html = re.sub(r'href=(["\'])?/([^"\'>\s]*)', fr'href="\1{basepath}/\2"', template_html)
+    template_html = re.sub(r'src=(["\'])?/([^"\'>\s]*)', fr'src="\1{basepath}/\2"', template_html)
 
     if os.path.exists(dest_path):
         shutil.rmtree(dest_path)
