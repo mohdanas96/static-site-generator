@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     dir_contents = ""
     if os.path.isdir(dir_path_content):
         dir_contents = os.listdir(dir_path_content)
@@ -18,13 +18,13 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             if os.path.isfile(final_path):
                 dest_file_path = Path(dest_path.replace(".md", ".html"))
                 dest_file_path.parent.mkdir(parents=True, exist_ok=True)
-                generate_page(final_path, template_path, dest_file_path)
+                generate_page(final_path, template_path, dest_file_path, basepath)
             else:
                 dest_path = os.path.join(dest_dir_path, content)
-                generate_pages_recursive(final_path, template_path, dest_path)
+                generate_pages_recursive(final_path, template_path, dest_path, basepath)
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     md_f = open(from_path, "r", encoding="utf-8")
     md = md_f.read()
@@ -37,6 +37,8 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(md)
     template_html = template_html.replace("{{ Title }}", title)
     template_html = template_html.replace("{{ Content }}", html)
+    template_html = template_html.replace('href="/"', f'href="{basepath}"')
+    template_html = template_html.replace('src="/"', f'src="{basepath}"')
 
     if os.path.exists(dest_path):
         shutil.rmtree(dest_path)
